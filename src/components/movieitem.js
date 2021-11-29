@@ -1,10 +1,34 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom'
+import Button from 'react-bootstrap/Button';
+import axios from 'axios';
 
 // import Component and extend MovieItem class with it
-class MovieItem extends Component 
-{
+class MovieItem extends Component {
+    // constructor to bind method
+    constructor() {
+        super();
+
+        // bind to this instance
+        this.DeleteMovie = this.DeleteMovie.bind(this);
+    }
+
+    // create delete movie method 
+    DeleteMovie(e) {
+        // stop multiple deletes
+        e.preventDefault();
+
+        console.log("Delete: " + this.props.myfilm._id);
+
+        // create a delete promise
+        axios.delete("http://localhost:4000/api/movies/" + this.props.myfilm._id)
+            .then(() => {
+                this.props.ReloadData();
+            })
+            .catch();
+    }
+
     // wrap return in render method
     render() {
         return (
@@ -23,7 +47,9 @@ class MovieItem extends Component
                         </blockquote>
                     </Card.Body>
                     {/* Add an edit button using link to pass id up*/}
-                    <Link to={"/edit/" +this.props.myfilm._id} className="btn btn-primary">Edit</Link>
+                    <Link to={"/edit/" + this.props.myfilm._id} className="btn btn-primary">Edit</Link>
+                    {/* Add an delete button and trap click event to delete method*/}
+                    <Button variant="danger" onClick={this.DeleteMovie}>Delete</Button>
                 </Card>
             </div>
         );

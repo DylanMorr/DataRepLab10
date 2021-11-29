@@ -9,7 +9,8 @@ class Movies extends Component
         // create a function and map the movie items to films 
         // setup a key using film.imdbID
         return this.props.films.map((film)=>{
-            return <MovieItem myfilm={film} key={film.imdbID}></MovieItem>
+            // pass ReloadData down to movieItem
+            return <MovieItem myfilm={film} key={film.imdbID} ReloadData={this.props.ReloadData}></MovieItem>
         });
     }
 }

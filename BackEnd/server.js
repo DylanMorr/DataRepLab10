@@ -93,6 +93,16 @@ app.put('/api/movies/:id', function (req, res) {
         })
 })
 
+// listen for delete method
+app.delete('/api/movies/:id', (req,res) => {
+    console.log("Delete Movie: " + req.params.id);
+
+    // find movie by id and delete
+    MovieModel.findByIdAndDelete(req.params.id, (err, data) => {
+        res.send(data);
+    })
+})
+
 // setup server movie api
 app.get('/api/movies', (req, res) => {
     // const for movies api
