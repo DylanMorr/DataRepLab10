@@ -7,6 +7,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 // include mongoose
 const mongoose = require('mongoose');
+const _default = require('atob');
+const path = require('path');
 
 // use cors
 app.use(cors());
@@ -19,6 +21,11 @@ app.use(function (req, res, next) {
         "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+
+// Tell where build folder is
+app.use(express.static(path.join(__dirname, '../build')));
+// Tell where static folder is
+app.use('/static', express.static(path.join(__dirname, 'build//static')));
 
 // parseapplication/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -94,7 +101,7 @@ app.put('/api/movies/:id', function (req, res) {
 })
 
 // listen for delete method
-app.delete('/api/movies/:id', (req,res) => {
+app.delete('/api/movies/:id', (req, res) => {
     console.log("Delete Movie: " + req.params.id);
 
     // find movie by id and delete
@@ -140,6 +147,12 @@ app.get('/api/movies', (req, res) => {
         // send back data
         res.json(data);
     })
+})
+
+// any other url sends index.html back
+app.get('*', (req, res) => {
+    // send index.html by joining paths
+    res.sendFile(path.join(__dirname + '/../build/index.html'));
 })
 
 app.listen(port, () => {
